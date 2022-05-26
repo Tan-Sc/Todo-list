@@ -67,7 +67,7 @@ export class TodoComponent implements OnInit {
 
     //Move Task
     drop(event: CdkDragDrop<ITask[]>) {
-        if (event.previousContainer === event.container) {
+        if (event.previousContainer === event.container || event.previousContainer.id === 'cdk-drop-list-2') {
 
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -100,12 +100,5 @@ export class TodoComponent implements OnInit {
 
         }
     };
-    ReturnPredicate() {
-        return true;
-    }
-
-    noReturnPredicate() {
-        return false;
-    }
 
 }   
