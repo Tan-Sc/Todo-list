@@ -11,13 +11,14 @@ import { ITask } from '../model/task';
 })
 export class TodoComponent implements OnInit {
     
-    obj = JSON.parse(localStorage.getItem('task') || "[]")  ;
+    task = JSON.parse(localStorage.getItem('task') || "[]")  ;
+    inProgress = JSON.parse(localStorage.getItem('inProgress') || "[]")  ;
+    done = JSON.parse(localStorage.getItem('done') || "[]")  ;
     
     todoForm !: FormGroup;
-    //Khai bao
-    tasks: ITask[] = this.obj
-    inprogress: ITask[] = [];
-    done: ITask[] = [];
+    tasks: ITask[] = this.task;
+    inprogress: ITask[] = this.inProgress;
+    dones: ITask[] = this.done;
     updateId! :any;
     isEditEnable: boolean = false;
     
@@ -66,7 +67,7 @@ export class TodoComponent implements OnInit {
     //Move Task
     drop(event: CdkDragDrop<ITask[]>) {
         if (event.previousContainer === event.container) {
-            
+
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
             transferArrayItem(
@@ -75,6 +76,24 @@ export class TodoComponent implements OnInit {
                 event.previousIndex,
                 event.currentIndex,
             );
+            const containerName = (container: string) =>
+            container === 'cdk-drop-list-0'
+              ? 'task'
+              : container === 'cdk-drop-list-1'
+              ? 'inProgress'
+              : 'done';
+    
+          if (containerName(event.container.id) === 'done') {
+            event.container.data.map((item) => (item.done = true));
+          }
+          localStorage.setItem(
+            containerName(event.container.id),
+            JSON.stringify(event.container.data)
+          );
+          localStorage.setItem(
+            containerName(event.previousContainer.id),
+            JSON.stringify(event.previousContainer.data)
+          );
         }
     };
 
