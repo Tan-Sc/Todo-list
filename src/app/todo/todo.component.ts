@@ -10,57 +10,58 @@ import { ITask } from '../model/task';
     styleUrls: ['./todo.component.scss']
 })
 export class TodoComponent implements OnInit {
-    
-    task = JSON.parse(localStorage.getItem('task') || "[]")  ;
-    inProgress = JSON.parse(localStorage.getItem('inProgress') || "[]")  ;
-    done = JSON.parse(localStorage.getItem('done') || "[]")  ;
-    
+
+
+    task = JSON.parse(localStorage.getItem('task') || "[]");
+    inProgress = JSON.parse(localStorage.getItem('inProgress') || "[]");
+    done = JSON.parse(localStorage.getItem('done') || "[]");
+
     todoForm !: FormGroup;
     tasks: ITask[] = this.task;
     inprogress: ITask[] = this.inProgress;
     dones: ITask[] = this.done;
-    updateId! :any;
+    updateId!: any;
     isEditEnable: boolean = false;
-    
+
     constructor(private fb: FormBuilder) { }
 
-    ngOnInit(): void { 
+    ngOnInit(): void {
         this.todoForm = this.fb.group({
             item: ['', Validators.required]
         })
     }
 
     //add Task
-    addTask(){
+    addTask() {
         this.tasks.push({
-            description:this.todoForm.value.item,
+            description: this.todoForm.value.item,
             done: false
         })
         localStorage.setItem('task', JSON.stringify(this.tasks));
-        
+
         this.todoForm.reset()
 
     }
 
     //deleteTask
-    deleteTask(i: number){
-        this.tasks.splice(i,1);
-       // localStorage.clear();
-       localStorage.setItem('task', JSON.stringify(this.tasks));
+    deleteTask(i: number) {
+        this.tasks.splice(i, 1);
+        // localStorage.clear();
+        localStorage.setItem('task', JSON.stringify(this.tasks));
     }
 
     //edit Task
-    editTask(item: ITask , i: number){
+    editTask(item: ITask, i: number) {
         this.todoForm.controls['item'].setValue(item.description);
         this.updateId = i;
         this.isEditEnable = true;
     }
 
-    updateTask(){
+    updateTask() {
         this.tasks[this.updateId].description = this.todoForm.value.item;
         this.tasks[this.updateId].done = false;
         this.todoForm.reset();
-        this.updateId= undefined;
+        this.updateId = undefined;
         this.isEditEnable = false;
     }
 
@@ -77,25 +78,34 @@ export class TodoComponent implements OnInit {
                 event.currentIndex,
             );
             const containerName = (container: string) =>
-            container === 'cdk-drop-list-0'
-              ? 'task'
-              : container === 'cdk-drop-list-1'
-              ? 'inProgress'
-              : 'done';
-    
-          if (containerName(event.container.id) === 'done') {
-            event.container.data.map((item) => (item.done = true));
-          }
-          localStorage.setItem(
-            containerName(event.container.id),
-            JSON.stringify(event.container.data)
-          );
-          localStorage.setItem(
-            containerName(event.previousContainer.id),
-            JSON.stringify(event.previousContainer.data)
-          );
+                container === 'cdk-drop-list-0'
+                    ? 'task'
+                    : container === 'cdk-drop-list-1'
+                        ? 'inProgress'
+                        : 'done';
+
+
+            if (containerName(event.container.id) === 'done') {
+                event.container.data.map((item) => (item.done = true));
+
+            }
+            localStorage.setItem(
+                containerName(event.container.id),
+                JSON.stringify(event.container.data)
+            );
+            localStorage.setItem(
+                containerName(event.previousContainer.id),
+                JSON.stringify(event.previousContainer.data)
+            );
+
         }
     };
+    ReturnPredicate() {
+        return true;
+    }
 
+    noReturnPredicate() {
+        return false;
+    }
 
 }   
