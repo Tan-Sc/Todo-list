@@ -7,19 +7,23 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Task name</mat-label>
                             <input formControlName="item" matInput placeholder="Add task name">
-                            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                            <mat-icon matSuffix>playlist_add</mat-icon>
                             <mat-hint>Add task name</mat-hint>
                         </mat-form-field>
-                        <button *ngIf="!isEditEnable" (click)="addTask()" mat-raised-button
+                        <div class="btn-group">
+                            <button *ngIf="!isEditEnable" (click)="addTask()" mat-raised-button
                             [disabled]="todoForm.invalid" color="primary">Add</button>
-                        <button *ngIf="isEditEnable" (click)="updateTask()" mat-raised-button
+                            <button *ngIf="isEditEnable" (click)="updateTask()" mat-raised-button
                             [disabled]="todoForm.invalid" color="primary">Update</button>
+                        </div>
                     </form>
+                    <button class="btn-clearTasks" (click)="clearTasks()" mat-raised-button
+                    color="warn">Clear-Tasks</button>
                 </mat-card>
             </div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-9 right-item">
             <div cdkDropListGroup class="drop-list-group">
                 <div class="col-md-4">
                     <!-- todo -->
@@ -47,7 +51,7 @@
                 <div class="col-md-4">
                     <!-- in progress -->
                     <div class="example-container">
-                        <h2>in progress</h2>
+                        <h2>In Progress</h2>
                         <div>
                             <div cdkDropList [cdkDropListData]="inprogress" class="example-list"
                                 (cdkDropListDropped)="drop($event)">
@@ -68,7 +72,7 @@
                 <div class="col-md-4">
                     <!-- done -->
                     <div class="example-container">
-                        <h2>done</h2>
+                        <h2>Done</h2>
                         <div>
                             <div cdkDropList [cdkDropListData]="done" class="example-list"
                                 (cdkDropListDropped)="drop($event)">
@@ -78,7 +82,7 @@
                                         <button mat-icon-button color="warn" (click)="deleteTask(i)">
                                             <mat-icon>delete</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="primary">
+                                        <button mat-icon-button color="success">
                                             <mat-icon>check_circle</mat-icon>
                                         </button>
                                     </div>
@@ -90,5 +94,6 @@
 
             </div>
         </div>
+
     </div>
 </div>
